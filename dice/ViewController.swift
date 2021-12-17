@@ -24,6 +24,7 @@ class ViewController: UIViewController {
         
         DiceStepper.value = 1
         DiceLabel.text = Int(DiceStepper.value).description
+        print("SumLabel\(SumLabel.frame)")
         // Do any additional setup after loading the view.
     }
 
@@ -70,16 +71,29 @@ class ViewController: UIViewController {
         
     }
     
-    func getRandomPosition() -> (Int, Int){
+    func getRandomPosition(positionArray:Array<CGRect>) -> (Int, Int){
         var x = Int.random(in: 30...370)
         var y = Int.random(in: 50...630)
-//        print("orig x \(x), orgin y \(y)")
-        while x > 50, x < 345,
-                y > 230, y < 400 {
-            x = Int.random(in: 30...370)
-            y = Int.random(in: 50...630)
-//            print("while x \(x), while y \(y)")
+        
+        var arrayIndex = 0
+        while arrayIndex < positionArray.count{
+            if positionArray[arrayIndex].intersection(CGRect(x: x, y: y, width: 65, height:65)).isNull{
+                arrayIndex += 1
+            }else{
+                x = Int.random(in: 30...370)
+                y = Int.random(in: 50...630)
+                arrayIndex = 0
+            }
         }
+        
+        
+//        print("orig x \(x), orgin y \(y)")
+//        while x > 50, x < 345,
+//                y > 230, y < 400 {
+//            x = Int.random(in: 30...370)
+//            y = Int.random(in: 50...630)
+//         print("while x \(x), while y \(y)")
+//        }
         return (x,y)
     }
     
@@ -93,6 +107,7 @@ class ViewController: UIViewController {
         var sum = 0
         
         var diceArray :[Int] = []
+        var positionArray :[CGRect] = [SumLabel.frame]
         // genterate the random int
         for i in 1...numOfDice{
             let diceValue = Int.random(in: 1...6)
@@ -100,8 +115,11 @@ class ViewController: UIViewController {
             
             let diceImageView = UIImageView(image: UIImage(systemName: "die.face.\(diceValue).fill"))
             
-            let randomPosition = getRandomPosition()
+            let randomPosition = getRandomPosition(positionArray: positionArray)
             diceImageView.frame = CGRect(x: randomPosition.0 , y: randomPosition.1, width: 65, height: 65)
+            positionArray.append(diceImageView.frame)
+            
+            print("while x \(randomPosition.0), while y \(randomPosition.1)")
             
             diceImageView.tintColor = UIColor.black
             diceImageView.tag = i
@@ -115,14 +133,14 @@ class ViewController: UIViewController {
             
         }
         
-        SumLabel.text = "Sum: \(sum)"
+        SumLabel.text = "Sum: \(sum)\n\n"
         SumLabel.isHidden = false
         self.view.bringSubviewToFront(SumLabel)
         
         var imageIndex = 0
         for diceValue in diceArray.sorted(){
             let smallDiceImageView = UIImageView(image: UIImage(systemName: "die.face.\(diceValue)"))
-            print("die.face.\(diceValue)")
+            
             
             
             smallDiceImageView.frame = CGRect(x: 77 + 44 * imageIndex, y: 327 , width: 40, height: 40)
