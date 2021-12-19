@@ -13,6 +13,7 @@
 		A599B8322769953300B5985C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A599B8302769953300B5985C /* Main.storyboard */; };
 		A599B8342769953500B5985C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A599B8332769953500B5985C /* Assets.xcassets */; };
 		A599B8372769953500B5985C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A599B8352769953500B5985C /* LaunchScreen.storyboard */; };
+		A5ED7AF7276DA55700DE9594 /* rollDiceSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A5ED7AF6276DA55600DE9594 /* rollDiceSound.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		A599B8332769953500B5985C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A599B8362769953500B5985C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A599B8382769953500B5985C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A5ED7AF6276DA55600DE9594 /* rollDiceSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = rollDiceSound.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		A599B8292769953300B5985C /* dice */ = {
 			isa = PBXGroup;
 			children = (
+				A5ED7AF6276DA55600DE9594 /* rollDiceSound.mp3 */,
 				A599B82A2769953300B5985C /* AppDelegate.swift */,
 				A599B82C2769953300B5985C /* SceneDelegate.swift */,
 				A599B82E2769953300B5985C /* ViewController.swift */,
@@ -127,6 +130,7 @@
 			files = (
 				A599B8372769953500B5985C /* LaunchScreen.storyboard in Resources */,
 				A599B8342769953500B5985C /* Assets.xcassets in Resources */,
+				A5ED7AF7276DA55700DE9594 /* rollDiceSound.mp3 in Resources */,
 				A599B8322769953300B5985C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

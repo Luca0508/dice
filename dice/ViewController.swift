@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
 
@@ -17,14 +18,14 @@ class ViewController: UIViewController {
     
     var numOfDice:Int = 1
     var prevNumOfDice: Int = 1
-    
+    let player = AVPlayer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         DiceStepper.value = 1
         DiceLabel.text = Int(DiceStepper.value).description
-        print("SumLabel\(SumLabel.frame)")
+        
         // Do any additional setup after loading the view.
     }
 
@@ -46,6 +47,7 @@ class ViewController: UIViewController {
         }
     }
     
+    
     func moveDice(diceImage :UIImageView, xEnd: Int, yEnd:Int){
         let moveAnimation = CABasicAnimation(keyPath: "position")
         moveAnimation.fromValue = [Int.random(in: 20...370), Int.random(in: 30...630)]
@@ -57,6 +59,7 @@ class ViewController: UIViewController {
         
         moveAnimation.fillMode = .forwards
         moveAnimation.isRemovedOnCompletion = false
+       
         
         diceImage.layer.add(moveAnimation, forKey: nil)
         
@@ -73,7 +76,7 @@ class ViewController: UIViewController {
     
     func getRandomPosition(positionArray:Array<CGRect>) -> (Int, Int){
         var x = Int.random(in: 30...370)
-        var y = Int.random(in: 50...630)
+        var y = Int.random(in: 60...630)
         
         var arrayIndex = 0
         while arrayIndex < positionArray.count{
@@ -81,27 +84,23 @@ class ViewController: UIViewController {
                 arrayIndex += 1
             }else{
                 x = Int.random(in: 30...370)
-                y = Int.random(in: 50...630)
+                y = Int.random(in: 60...630)
                 arrayIndex = 0
             }
         }
         
-        
-//        print("orig x \(x), orgin y \(y)")
-//        while x > 50, x < 345,
-//                y > 230, y < 400 {
-//            x = Int.random(in: 30...370)
-//            y = Int.random(in: 50...630)
-//         print("while x \(x), while y \(y)")
-//        }
         return (x,y)
     }
     
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake{
+            cleanDice()
+            makeDiceRoll()
+            addSoundEffect()
+        }
+    }
     
-    @IBAction func roll(_ sender: UIButton) {
-        cleanDice()
-        
-        
+    func makeDiceRoll(){
         numOfDice = Int(DiceStepper.value)
         prevNumOfDice = numOfDice
         var sum = 0
@@ -119,9 +118,10 @@ class ViewController: UIViewController {
             diceImageView.frame = CGRect(x: randomPosition.0 , y: randomPosition.1, width: 65, height: 65)
             positionArray.append(diceImageView.frame)
             
-            print("while x \(randomPosition.0), while y \(randomPosition.1)")
             
             diceImageView.tintColor = UIColor.black
+            
+            // create the tag for removing the imageView later
             diceImageView.tag = i
             
             
@@ -137,12 +137,13 @@ class ViewController: UIViewController {
         SumLabel.isHidden = false
         self.view.bringSubviewToFront(SumLabel)
         
+        
+        // for the small dice in the SumLabel
         var imageIndex = 0
         for diceValue in diceArray.sorted(){
             let smallDiceImageView = UIImageView(image: UIImage(systemName: "die.face.\(diceValue)"))
             
-            
-            
+            // setting the position for small dice by imageIndex
             smallDiceImageView.frame = CGRect(x: 77 + 44 * imageIndex, y: 327 , width: 40, height: 40)
             
             smallDiceImageView.tintColor = UIColor.white
@@ -152,19 +153,25 @@ class ViewController: UIViewController {
             view.addSubview(smallDiceImageView)
             self.view.bringSubviewToFront(smallDiceImageView)
         }
-//        let sumLabel = UILabel(frame: CGRect(x: 130, y: 300, width: 155, height: 80))
-//
-//        sumLabel.alpha = 0.75
-//        sumLabel.isOpaque = true
-//        sumLabel.layer.cornerRadius = 15
-//        sumLabel.numberOfLines = 0
-//        sumLabel.textColor = .white
-//        sumLabel.backgroundColor = .black
-//        sumLabel.textAlignment = .center
-//        sumLabel.font = UIFont(name: "System-Heavy", size: 21.0)
-//        sumLabel.text = "Sum:\n\(sum)"
-//
-//        view.addSubview(sumLabel)
     }
+    
+    // add sound effect while rolling the dice
+    func addSoundEffect(){
+        
+        let fileUrl = Bundle.main.url(forResource: "rollDiceSound", withExtension: "mp3")
+        player.replaceCurrentItem(with: AVPlayerItem(url: fileUrl!))
+        player.volume = 0.9
+        player.play()
+    }
+    
+    @IBAction func roll(_ sender: UIButton) {
+        
+        cleanDice()
+        makeDiceRoll()
+        addSoundEffect()
+        
+    }
+    
+    
 }
 
